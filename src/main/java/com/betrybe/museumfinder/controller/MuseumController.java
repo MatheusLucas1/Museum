@@ -9,9 +9,11 @@ import com.betrybe.museumfinder.util.ModelDtoConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -38,7 +40,27 @@ public class MuseumController {
     Museum createdMuseum = service.createMuseum(museum);
     return ResponseEntity.status(HttpStatus.CREATED).body(createdMuseum);
   }
+  /**
+   * GetMapping.
+   */
 
+  @GetMapping("/closest")
+  public ResponseEntity<MuseumDto> getClosestMuseum(
+      @RequestParam("lat") Double latitude,
+      @RequestParam("lng") Double longitude,
+      @RequestParam("max_dist_km") Double maxDistance
+  ) {
+    Coordinate coordinate = new Coordinate(latitude, longitude);
+
+    Museum closestMuseum = service.getClosestMuseum(coordinate, maxDistance);
+
+    if (closestMuseum == null) {
+      return ResponseEntity.notFound().build();
+    }
+
+    MuseumDto museumDto = ModelDtoConverter.modelToDto(closestMuseum);
+    return ResponseEntity.ok(museumDto);
+  }
 
 
 }
