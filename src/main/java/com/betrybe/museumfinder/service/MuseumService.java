@@ -22,12 +22,12 @@ public class MuseumService implements MuseumServiceInterface {
   public Museum getClosestMuseum(Coordinate coordinate, Double maxDistance) {
     Boolean coordenadaEhValida = CoordinateUtil.isCoordinateValid(coordinate);
     if (!coordenadaEhValida) {
-      throw new InvalidCoordinateException("Coordenada inválida");
+      throw new InvalidCoordinateException();
     }
 
     Optional<Museum> museum = museumFakeDatabase.getClosestMuseum(coordinate, maxDistance);
     if (museum.isEmpty()) {
-      throw new MuseumNotFoundException("Não há museus próximos");
+      throw new MuseumNotFoundException();
     }
     return museum.get();
   }
@@ -36,7 +36,7 @@ public class MuseumService implements MuseumServiceInterface {
   public Museum createMuseum(Museum museum) {
     Boolean coordenadaEhValida = CoordinateUtil.isCoordinateValid(museum.getCoordinate());
     if (!coordenadaEhValida) {
-      throw new InvalidCoordinateException("Coordenada inválida");
+      throw new InvalidCoordinateException();
     }
     return museumFakeDatabase.saveMuseum(museum);
 
